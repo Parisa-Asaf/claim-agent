@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+# claim-agent
+=======
 # ACRLE — Autonomous Consumer Rights & Legal Recovery Engine
 ### Module 1: Foundation & Verification
 **CSE471 · Group 07 · Lab Section 02 · Spring 2026 · BRAC University**
@@ -186,3 +189,4 @@ Use [Neon](https://neon.tech) (free) for PostgreSQL on Vercel.
 - Prisma client is a singleton — no connection pool issues in dev hot-reload
 - Company directory is auto-seeded with 15 real companies on first search
 - SHA-256 hashing uses Node.js built-in `crypto` — no external dependency
+>>>>>>> origin/master

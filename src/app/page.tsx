@@ -3,6 +3,7 @@ import FeatureExtract from "@/components/FeatureExtract";
 import FeatureHash from "@/components/FeatureHash";
 import FeatureCompany from "@/components/FeatureCompany";
 import FeatureStatute from "@/components/FeatureStatute";
+import FeatureTriage from "@/components/FeatureTriage";
 
 export default function Module1Page() {
   return (
@@ -86,6 +87,7 @@ export default function Module1Page() {
         <FeatureHash />
         <FeatureCompany />
         <FeatureStatute />
+        <FeatureTriage />
       </main>
 
       {/* ── Status Bar ── */}

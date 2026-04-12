@@ -51,6 +51,7 @@ model Company {
   createdAt     DateTime @default(now())
 
   name          String
+  email         String?
   legalDept     String?
   address       String
   city          String?
@@ -118,6 +119,7 @@ enum ClaimStatus {
   EVIDENCE_COLLECTED
   STATUTES_MATCHED
   READY_FOR_DISPATCH
+  DISPATCHED
 }
 
 enum PriorityLevel {

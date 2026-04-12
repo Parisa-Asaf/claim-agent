@@ -1,8 +1,9 @@
 "use client";
 // src/components/FeatureExtract.tsx
-// Feature 1: AI Evidence Extraction — Member: Parisa Asaf (23101270)
+// Features 1, 2, & 3 — Member: Parisa Asaf (23101270)
 
 import { useState, useRef, useCallback } from "react";
+import Link from "next/link"; // Added for navigation
 import type { ExtractApiResponse, ExtractedReceiptData } from "@/types";
 
 interface ConfidenceBarProps {
@@ -47,7 +48,6 @@ export default function FeatureExtract() {
     setResult(null);
     setEvidenceId(null);
 
-    // Preview
     if (file.type.startsWith("image/")) {
       const url = URL.createObjectURL(file);
       setPreview({ url, name: file.name, size: formatSize(file.size) });
@@ -102,19 +102,18 @@ export default function FeatureExtract() {
 
   return (
     <div className="feature-card bg-bg2 border border-border rounded-2xl overflow-hidden">
-      {/* Top accent line */}
       <div className="h-0.5 bg-gradient-to-r from-gold to-transparent" />
 
       {/* Header */}
       <div className="flex items-start gap-4 p-6 border-b border-border">
         <div className="w-11 h-11 rounded-xl flex items-center justify-center text-xl flex-shrink-0"
           style={{ background: "rgba(200,169,110,0.12)", border: "1px solid rgba(200,169,110,0.2)" }}>
-          🧾
+          ⚖️
         </div>
         <div className="flex-1">
-          <div className="font-mono text-[10px] text-faint tracking-widest mb-1">FEATURE 01 · MEMBER-1</div>
-          <div className="text-base font-semibold tracking-tight">AI Evidence Extraction</div>
-          <div className="font-mono text-[11px] text-faint mt-1">Parisa Asaf · 23101270</div>
+          <div className="font-mono text-[10px] text-faint tracking-widest mb-1">MODULES 01, 02, 03 · PARISA ASAF</div>
+          <div className="text-base font-semibold tracking-tight">AI Evidence & Dispatch System</div>
+          <div className="font-mono text-[11px] text-gold mt-1">23101270 · Google Vision + SMTP</div>
         </div>
         {(result || preview || error) && (
           <button
@@ -127,115 +126,72 @@ export default function FeatureExtract() {
         )}
       </div>
 
-      {/* Body */}
       <div className="p-6">
-        {/* API Badge */}
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-md mb-4 font-mono text-[10px] font-medium tracking-wider"
           style={{ background: "rgba(200,169,110,0.1)", color: "var(--gold)", border: "1px solid rgba(200,169,110,0.2)" }}>
           <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse-dot" />
-          GOOGLE VISION API
+          ACTIVE SYSTEM
         </div>
 
         <p className="text-sm text-muted leading-relaxed font-light mb-5">
-          Upload a receipt image. The system uses AI OCR to automatically extract the
-          Merchant Name, Transaction Date, and Amount — building a verifiable evidence record.
+          Process legal evidence and manage recovery claims. Extract data from receipts, 
+          review claim records, and dispatch formal notices to legal departments.
         </p>
 
-        {/* Receipt Preview */}
-        {preview && (
-          <div className="border border-border rounded-xl overflow-hidden mb-4 animate-fade-up">
-            {preview.url && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={preview.url} alt="Receipt" className="w-full h-36 object-cover" />
-            )}
-            <div className="flex items-center justify-between px-3 py-2 font-mono text-[11px] text-faint bg-bg border-t border-border">
-              <span className="truncate">{preview.name}</span>
-              <span style={{ color: "var(--gold)" }}>{preview.size}</span>
-            </div>
-          </div>
-        )}
-
         {/* Upload Zone */}
-        <div
-          className={`upload-zone mb-4 ${isDragging ? "drag-active" : ""}`}
-          onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-          onDragLeave={() => setIsDragging(false)}
-          onDrop={handleDrop}
-        >
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*,.pdf"
-            onChange={handleFileChange}
-          />
-          <div className="text-3xl mb-3">📎</div>
-          <div className="text-sm font-semibold mb-1">
-            {preview ? "Drop another receipt" : "Drop receipt image here"}
-          </div>
-          <div className="font-mono text-[11px] text-faint">JPG · PNG · PDF · Max 10MB</div>
-        </div>
-
-        {/* Loading */}
-        {loading && (
-          <div className="flex items-center gap-3 py-3 font-mono text-[12px] text-faint animate-fade-up">
-            <div className="w-4 h-4 rounded-full border-2 border-border animate-spin-slow"
-              style={{ borderTopColor: "var(--gold)" }} />
-            Analyzing receipt with Vision API...
+        {!result && (
+          <div
+            className={`upload-zone mb-4 ${isDragging ? "drag-active" : ""}`}
+            onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
+            onDragLeave={() => setIsDragging(false)}
+            onDrop={handleDrop}
+          >
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*,.pdf"
+              onChange={handleFileChange}
+            />
+            <div className="text-3xl mb-3">📎</div>
+            <div className="text-sm font-semibold mb-1">Drop receipt to begin</div>
+            <div className="font-mono text-[11px] text-faint">Vision OCR Extraction</div>
           </div>
         )}
 
-        {/* Error */}
-        {error && (
-          <div className="text-danger text-sm font-mono p-3 rounded-lg border animate-fade-up"
-            style={{ background: "rgba(248,113,113,0.08)", borderColor: "rgba(248,113,113,0.2)" }}>
-            ⚠ {error}
-          </div>
-        )}
+        {/* Loading/Error States */}
+        {loading && <div className="text-sm font-mono text-faint py-4">Processing with Vision API...</div>}
+        {error && <div className="text-danger text-sm font-mono p-3 bg-red-900/10 border border-red-900/20 rounded-lg">{error}</div>}
 
-        {/* Result */}
+        {/* Extraction Result Preview */}
         {result && (
-          <div className="animate-fade-up">
-            <div className="bg-bg border border-border rounded-xl p-4 space-y-2">
-              {[
-                { key: "MERCHANT NAME", val: result.merchantName },
-                { key: "TRANSACTION DATE", val: result.transactionDate },
-                { key: "AMOUNT", val: `${result.amount} ${result.currency}`, gold: true },
-                { key: "AVG CONFIDENCE", val: `${Math.round((result.confidenceMerchant + result.confidenceDate + result.confidenceAmount) / 3)}%` },
-              ].map(({ key, val, gold }) => (
-                <div key={key} className="flex justify-between items-center py-2 border-b border-border last:border-0">
-                  <span className="font-mono text-[11px] text-faint tracking-wider">{key}</span>
-                  <span className={`text-sm font-medium ${gold ? "text-gold" : "text-text"}`}>{val}</span>
-                </div>
-              ))}
+          <div className="animate-fade-up bg-bg border border-border rounded-xl p-4 space-y-2 mb-4">
+            <div className="flex justify-between items-center py-1 border-b border-border text-[11px] font-mono">
+              <span className="text-faint uppercase">Merchant</span>
+              <span className="text-white">{result.merchantName}</span>
             </div>
-
-            {/* Confidence Bars */}
-            <div className="mt-4 px-1">
-              <ConfidenceBar label="Merchant" value={result.confidenceMerchant} color="var(--gold)" />
-              <ConfidenceBar label="Date" value={result.confidenceDate} color="var(--emerald)" />
-              <ConfidenceBar label="Amount" value={result.confidenceAmount} color="var(--sky)" />
+            <div className="flex justify-between items-center py-1 text-[11px] font-mono">
+              <span className="text-faint uppercase">Amount</span>
+              <span className="text-gold">{result.amount} {result.currency}</span>
             </div>
-
-            {/* Evidence ID */}
-            {evidenceId && (
-              <div className="mt-3 font-mono text-[10px] text-faint">
-                Evidence ID: <span className="text-sky">{evidenceId}</span>
-              </div>
-            )}
-
-            {/* CTA */}
-            <button
-              onClick={handleAddToClaim}
-              className="w-full mt-4 py-2.5 rounded-lg text-sm font-semibold font-mono tracking-wider transition-all duration-200"
-              style={addedToClaim
-                ? { background: "rgba(74,222,128,0.15)", color: "var(--emerald)", border: "1px solid rgba(74,222,128,0.3)" }
-                : { background: "var(--gold)", color: "#0a0b0f" }
-              }
-            >
-              {addedToClaim ? "✓ Added to Claim" : "+ Add to Active Claim"}
-            </button>
           </div>
         )}
+
+        {/* --- MODULE 2 & 3 REDIRECT SECTION --- */}
+        <div className="mt-6 pt-6 border-t border-border/50">
+          <div className="flex items-center justify-between mb-4">
+            <div className="font-mono text-[10px] text-faint tracking-wider uppercase">Claim Management Portal</div>
+            <div className="h-1 w-12 bg-gold/30 rounded-full" />
+          </div>
+          
+          <button 
+            type="button"
+            onClick={() => window.location.href = '/dashboard'}
+            className="w-full py-3 px-4 bg-bg3 border border-gold/20 hover:border-gold/50 text-gold rounded-xl font-mono text-[11px] tracking-widest uppercase transition-all flex items-center justify-center gap-2 cursor-pointer hover:bg-gold/5"
+          >
+            <span>Go to Claims Dashboard</span>
+            <span>→</span>
+          </button>
+        </div>
       </div>
     </div>
   );

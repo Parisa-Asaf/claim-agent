@@ -1,4 +1,6 @@
-// src/app/page.tsx
+"use client";
+
+import Link from "next/link";
 import FeatureExtract from "@/components/FeatureExtract";
 import FeatureHash from "@/components/FeatureHash";
 import FeatureCompany from "@/components/FeatureCompany";
@@ -16,16 +18,21 @@ export default function Module1Page() {
         </div>
         <nav className="flex gap-1">
           {["MODULE 1", "MODULE 2", "MODULE 3"].map((mod, i) => (
-            <button
-              key={mod}
-              className="px-4 py-1.5 rounded-lg font-mono text-[11px] tracking-wider transition-all"
-              style={i === 0
-                ? { background: "var(--bg3)", color: "var(--gold)", border: "1px solid rgba(200,169,110,0.3)" }
-                : { color: "var(--faint)" }
-              }
+            <Link 
+              key={mod} 
+              href={i === 2 ? "/dashboard" : "/"} 
+              style={{ textDecoration: 'none' }}
             >
-              {mod}
-            </button>
+              <button
+                className="px-4 py-1.5 rounded-lg font-mono text-[11px] tracking-wider transition-all hover:opacity-80"
+                style={i === 0
+                  ? { background: "var(--bg3)", color: "var(--gold)", border: "1px solid rgba(200,169,110,0.3)" }
+                  : { color: "var(--faint)" }
+                }
+              >
+                {mod}
+              </button>
+            </Link>
           ))}
         </nav>
         <div className="font-mono text-[11px] text-faint border border-border px-3 py-1.5 rounded">

@@ -18,7 +18,6 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Evidence not found" }, { status: 404 });
     }
 
-    // 2. Draft the Official Notice
     const msg = {
       to: recipientEmail || "legal-dept@company.com",
       from: "notifications@claimagent.ai", // Your verified sender
@@ -37,13 +36,46 @@ export async function POST(req: NextRequest) {
       `,
     };
 
-    // 3. The "Demo Logic"
     if (!process.env.SENDGRID_API_KEY || process.env.SENDGRID_API_KEY.includes("MOCK")) {
       console.log("📧 --- DEMO MODE: EMAIL PREVIEW ---");
       console.log(`TO: ${msg.to}`);
       console.log(`SUBJECT: ${msg.subject}`);
       console.log("CONTENT: Legal notice generated successfully.");
       console.log("📧 -------------------------------");
+      // 1. Create the professional template
+      const legalTemplate = `
+      ------------------------------------------------------------
+      FORMAL NOTICE OF CONSUMER CLAIM
+      ------------------------------------------------------------
+      Date: ${new Date().toLocaleDateString()}
+      Claim Reference: #${evidence.id.substring(0, 8)}
+
+      RE: Formal Dispute for Transaction at ${evidence.merchantName}
+
+      To the Legal Department,
+
+      This letter serves as a formal notice of a consumer claim regarding 
+      a transaction occurring on ${evidence.transactionDate}. 
+
+      Evidence Details:
+      - Merchant: ${evidence.merchantName}
+      - Amount: ${evidence.currency} ${evidence.amount}
+      - Evidence Hash: ${evidence.sha256Hash} (SHA-256 Verified)
+
+      The attached evidence has been processed and cryptographically 
+      verified by the ClaimAgent AI system. We request a formal 
+      review of this matter within 14 business days.
+
+    Regards,
+    ClaimAgent Automated Dispatch
+    ------------------------------------------------------------
+`   ;
+
+    console.log("📧 --- DEMO MODE: EMAIL PREVIEW ---");
+    console.log(`TO: ${recipientEmail}`);
+    console.log(`SUBJECT: LEGAL NOTICE: Claim ID #${evidence.id.substring(0, 6)}`);
+    console.log(`CONTENT: ${legalTemplate}`);
+    console.log("📧 -------------------------------");
       
       // Simulate network delay
       await new Promise(r => setTimeout(r, 1500));

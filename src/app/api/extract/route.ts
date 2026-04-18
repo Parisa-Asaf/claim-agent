@@ -97,7 +97,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<ExtractApiRes
     }
 
     const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
+    const buffer = Buffer.from(arrayBuffer); 
     const base64 = buffer.toString("base64");
 
     // UNIQUE HASH SHIELD

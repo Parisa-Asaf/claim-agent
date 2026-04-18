@@ -111,7 +111,7 @@ export default function FeatureExtract() {
           ⚖️
         </div>
         <div className="flex-1">
-          <div className="font-mono text-[10px] text-faint tracking-widest mb-1">MODULES 01, 02, 03 · PARISA ASAF</div>
+          <div className="font-mono text-[10px] text-faint tracking-widest mb-1">MODULES 01, 02, 03 · Md. Asif Ahsan Safwan · (23101103) </div>
           <div className="text-base font-semibold tracking-tight">AI Evidence & Dispatch System</div>
           <div className="font-mono text-[11px] text-gold mt-1">23101270 · Google Vision + SMTP</div>
         </div>

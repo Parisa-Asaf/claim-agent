@@ -122,3 +122,14 @@ body::before {
 .feature-card:hover {
   transform: translateY(-1px);
 }
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--gold);
+  border-radius: 10px;
+}

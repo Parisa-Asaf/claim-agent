@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.24.0",
-    "@prisma/client": "^5.13.0",
+    "@prisma/client": "^5.22.0",
     "@sendgrid/mail": "^8.1.6",
     "axios": "^1.7.2",
     "crypto-js": "^4.2.0",
@@ -24,6 +24,7 @@
     "next": "^14.2.3",
     "nodemailer": "^8.0.5",
     "openai": "^4.47.1",
+    "prisma": "^5.22.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sharp": "^0.33.4",
@@ -41,7 +42,6 @@
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.3",
     "postcss": "^8.4.38",
-    "prisma": "^5.22.0",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"
   }

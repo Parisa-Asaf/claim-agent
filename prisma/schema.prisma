@@ -1,6 +1,3 @@
-// Prisma Schema — ACRLE Module 1
-// Run: npx prisma db push  OR  npx prisma migrate dev
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,108 +7,112 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ─── MODULE 1: FOUNDATION & VERIFICATION ─────────────────────────────────────
-
-// Feature 1 & 2: Uploaded evidence files with extracted data + hash
 model Evidence {
-  id            String   @id @default(uuid())
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-
-  // File metadata
-  fileName      String
-  fileSize      Int
-  mimeType      String
-  fileUrl       String?  // S3 / local path
-
-  // Feature 1: Vision API extracted fields
-  merchantName  String?
+  id              String    @id @default(uuid())
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  fileName        String
+  fileSize        Int
+  mimeType        String
+  fileUrl         String?
+  merchantName    String?
   transactionDate DateTime?
-  amount        Float?
-  currency      String?  @default("USD")
-  rawExtraction Json?    // full Vision API response
-  confidenceScore Float? // avg confidence 0–100
-
-  // Feature 2: SHA-256 hash for tamper-proofing
-  sha256Hash    String   @unique
-  hashAlgorithm String   @default("SHA-256")
-  hashVerified  Boolean  @default(true)
-  hashTimestamp DateTime @default(now())
-
-  // Relations
-  claimId       String?
-  claim         Claim?   @relation(fields: [claimId], references: [id])
+  amount          Float?
+  currency        String?   @default("USD")
+  rawExtraction   Json?
+  confidenceScore Float?
+  sha256Hash      String    @unique
+  hashAlgorithm   String    @default("SHA-256")
+  hashVerified    Boolean   @default(true)
+  hashTimestamp   DateTime  @default(now())
+  claimId         String?
+  claim           Claim?    @relation(fields: [claimId], references: [id])
 
   @@map("evidence")
 }
 
-// Feature 3: Corporate legal directory entries
 model Company {
-  id            String   @id @default(uuid())
-  createdAt     DateTime @default(now())
-
-  name          String
-  email         String?
-  legalDept     String?
-  address       String
-  city          String?
-  country       String
-  countryCode   String   @db.VarChar(2)
-  industry      String?
-  website       String?
-  latitude      Float?
-  longitude     Float?
-  placeId       String?  // Google Maps Place ID
-  verified      Boolean  @default(false)
-
-  // Relations
-  claims        Claim[]
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  name        String
+  email       String?
+  legalDept   String?
+  address     String
+  city        String?
+  country     String
+  countryCode String   @db.VarChar(2)
+  industry    String?
+  website     String?
+  latitude    Float?
+  longitude   Float?
+  placeId     String?
+  verified    Boolean  @default(false)
+  claims      Claim[]
 
   @@map("companies")
 }
 
-// Feature 4: Statute lookup results
 model StatuteLookup {
   id            String   @id @default(uuid())
   createdAt     DateTime @default(now())
-
   grievanceText String   @db.Text
   grievanceType String?
   jurisdiction  String
-  rawResponse   Json     // full OpenAI response
-  statutes      Json     // parsed statutes array
-
-  // Relations
+  rawResponse   Json
+  statutes      Json
   claimId       String?
   claim         Claim?   @relation(fields: [claimId], references: [id])
 
   @@map("statute_lookups")
 }
 
-// Master claim record linking all Module 1 artifacts
 model Claim {
-  id            String      @id @default(uuid())
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-
-  title         String?
-  status        ClaimStatus @default(DRAFT)
-  grievanceText String?     @db.Text
-  grievanceType String?
-
-  // Feature 2: Claim Triage fields
-  violationType    String?
-  priorityLevel    PriorityLevel @default(MEDIUM)
-  expirationDate   DateTime?
-  notes            String?   @db.Text
-
-  // Relations
-  evidences     Evidence[]
-  statutes      StatuteLookup[]
-  companyId     String?
-  company       Company? @relation(fields: [companyId], references: [id])
+  id             String        @id @default(uuid())
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  title          String?
+  status         ClaimStatus   @default(DRAFT)
+  grievanceText  String?       @db.Text
+  grievanceType  String?
+  violationType  String?
+  priorityLevel  PriorityLevel @default(MEDIUM)
+  expirationDate DateTime?
+  notes          String?       @db.Text
+  evidences      Evidence[]
+  statutes       StatuteLookup[]
+  companyId      String?
+  company        Company?      @relation(fields: [companyId], references: [id])
 
   @@map("claims")
+}
+
+model User {
+  id         String     @id @default(uuid())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  name       String
+  email      String     @unique
+  role       UserRole   @default(LEGAL_EXPERT)
+  isActive   Boolean    @default(true)
+  assignedBy String?
+  auditLogs  AuditLog[]
+
+  @@map("users")
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  action      String
+  entity      String
+  entityId    String?
+  details     Json?
+  performedBy String?
+  ipAddress   String?
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
 }
 
 enum ClaimStatus {
@@ -126,4 +127,10 @@ enum PriorityLevel {
   HIGH
   MEDIUM
   LOW
+}
+
+enum UserRole {
+  ADMIN
+  LEGAL_EXPERT
+  VIEWER
 }

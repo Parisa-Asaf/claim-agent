@@ -6,6 +6,8 @@ import FeatureHash from "@/components/FeatureHash";
 import FeatureCompany from "@/components/FeatureCompany";
 import FeatureStatute from "@/components/FeatureStatute";
 import FeatureTriage from "@/components/FeatureTriage";
+import FeatureRBAC from "@/components/FeatureRBAC";
+import FeatureAuditLog from "@/components/FeatureAuditLog";
 
 export default function Module1Page() {
   return (
@@ -95,6 +97,8 @@ export default function Module1Page() {
         <FeatureCompany />
         <FeatureStatute />
         <FeatureTriage />
+        <FeatureRBAC />
+        <FeatureAuditLog />
       </main>
 
       {/* ── Status Bar ── */}

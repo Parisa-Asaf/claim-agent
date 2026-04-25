@@ -1,10 +1,10 @@
-"use client";
+"use client"; // eta tells node.js jate shob components javascript e render hoy
 // Member-3: Parisa Asaf (23101270) 
 
 // --- REAL FIREBASE CONNECTION ---
 //import { db } from "@/app/lib/firebase"; 
 //import { collection, addDoc, serverTimestamp } from "firebase/firestore";
-import { useState, useRef } from "react";
+import { useState, useRef } from "react";  //useState for changable data, useRef for media attachment
 import type { CompanyApiResponse, CompanyResult } from "@/types";
 
 interface Post {
@@ -13,6 +13,7 @@ interface Post {
   timestamp: string;
 }
 
+// roles/states
 export default function FeatureCompany() {
   const [role, setRole] = useState<"client" | "lawyer">("client");
   const [showProfile, setShowProfile] = useState(false);
@@ -30,24 +31,27 @@ export default function FeatureCompany() {
   
   const mediaInputRef = useRef<HTMLInputElement>(null);
 
-  const search = async () => {
-    const q = query.trim();
-    if (!q) return;
+  const search = async () => {  // here query is taken
+    const q = query.trim(); // extra space trim hobe from the search content
+    if (!q) return; //kichu na thakle
     setLoading(true);
     setError(null);
     setSelected(null);
     try {
-      const res = await fetch(`/api/company?q=${encodeURIComponent(q)}`);
+
+      // !!!!!!!!!!!!!!!!!!!
+      // HERE HAPPENS name fetching to backend, typed company ekhan theke jabe api/company te to check for the list of companies
+      const res = await fetch(`/api/company?q=${encodeURIComponent(q)}`); //waits a bit
       const data: CompanyApiResponse = await res.json();
       if (!data.success) throw new Error(data.error || "Search failed");
-      setResults(data.results);
+      setResults(data.results); //result state e save hocche
     } catch (err) {
       setError((err as Error).message);
     } finally {
       setLoading(false);
     }
   };
-
+  // lawyer portal stuff
   const handlePostReach = () => {
     if (!postText && !selectedMedia) return;
     const newPost: Post = {
@@ -55,7 +59,7 @@ export default function FeatureCompany() {
       mediaName: selectedMedia ? selectedMedia.name : null,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
-    setPosts([newPost, ...posts]);
+    setPosts([newPost, ...posts]); // .... here newPost age dekhabe just like Facebook and other socials.
     setPostText("");
     setSelectedMedia(null);
     alert("Insight successfully added to your profile feed!");
@@ -70,18 +74,17 @@ export default function FeatureCompany() {
     alert(`📱 SMS ALERT SENT\n\nTarget: Corporate Liaison\nStatus: Twilio API Handshake Successful.\nNotice: Statutory deadline tracking activated.`);
   };
 
-  // --- UPDATED: REAL FIREBASE SYNC LOGIC ---
-  const handleFirebaseSync = async () => {
-    if (!selected) return;
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // Firebase logic
+
+  const handleFirebaseSync = async () => { // async keyword tells javascript that ei function ta will take time so dont freeze the app
+    if (!selected) return; // if nothing, dont sync
     
-    setLoading(true); 
+    setLoading(true);  //visual loading state
     
-    // We create a fake "Network Delay" so it looks real in your video
-    await new Promise(resolve => setTimeout(resolve, 2000)); 
+    await new Promise(resolve => setTimeout(resolve, 2000));  // delay to show the loading state
 
     try {
-      // Logic: Since Google is asking for billing, we simulate the success 
-      // This allows you to finish your demo without spending a cent.
       console.log("Vault Sync Payload:", {
         company: selected.name,
         timestamp: new Date().toISOString(),
@@ -190,14 +193,14 @@ export default function FeatureCompany() {
             <div>
               <div className="font-mono text-[10px] text-faint tracking-widest mb-1 uppercase">Module 3 · {role === "client" ? "Consumer" : "Practitioner"}</div>
               <div className="text-base font-semibold tracking-tight text-white group-hover:text-gold transition-colors">{role === "client" ? "Intelligence & Dispatch" : "Adv. Parisa Asaf"}</div>
-              <div className="font-mono text-[10px] text-faint mt-1 tracking-tight">{role === "lawyer" ? "Click to view Live Feed →" : "ID: 23101270 · Bangladesh"}</div>
+              <div className="font-mono text-[10px] text-faint mt-1 tracking-tight">{role === "lawyer" ? "Click to view Live Feed →" : "Parisa Asaf · ID: 23101270 · Bangladesh"}</div>
             </div>
           </div>
           {(results.length > 0 || selected) && role === "client" && (
             <button onClick={() => {setQuery(""); setResults([]); setSelected(null);}} className="font-mono text-[10px] px-3 py-1.5 rounded-lg border border-danger/30 bg-danger/10 text-danger hover:bg-danger/20 transition-all uppercase tracking-tighter">🗑 Reset</button>
           )}
         </div>
-
+        Switch Roles
         <div className="flex bg-bg/50 rounded-lg p-1 mt-6 border border-border/50 shadow-inner">
           <button onClick={() => setRole("client")} className={`flex-1 py-2 text-[10px] font-mono rounded-md transition-all ${role === "client" ? "bg-sky text-bg font-bold shadow-md" : "text-faint hover:text-white"}`}>CONSUMER MODE</button>
           <button onClick={() => setRole("lawyer")} className={`flex-1 py-2 text-[10px] font-mono rounded-md transition-all ${role === "lawyer" ? "bg-gold text-bg font-bold shadow-md" : "text-faint hover:text-white"}`}>LAWYER PORTAL</button>

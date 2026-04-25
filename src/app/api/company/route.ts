@@ -89,7 +89,7 @@ async function searchGoogleMaps(query: string): Promise<CompanyResult[]> {
     };
   });
 }
-
+// featureCompany er async func theke searched query 'q' fetch kore, lowercase enable kore so it works both ways, and then 
 export async function GET(req: NextRequest): Promise<NextResponse<CompanyApiResponse>> {
   try {
     const query = req.nextUrl.searchParams.get("q")?.toLowerCase().trim();
@@ -101,7 +101,7 @@ export async function GET(req: NextRequest): Promise<NextResponse<CompanyApiResp
       );
     }
 
-    // Filter our local list based on the search query
+    // .filter() match find kore
     const filteredResults = SEED_COMPANIES.filter(c => 
       c.name.toLowerCase().includes(query) || 
       c.industry.toLowerCase().includes(query)

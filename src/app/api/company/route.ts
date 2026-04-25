@@ -96,7 +96,7 @@ export async function GET(req: NextRequest): Promise<NextResponse<CompanyApiResp
 
     if (!query) {
       return NextResponse.json(
-        { success: false, results: [], soursce: "database", error: "Query param ?q= required" },
+        { success: false, results: [], source: "database", error: "Query param ?q= required" },
         { status: 400 }
       );
     }

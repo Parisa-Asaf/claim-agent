@@ -15,7 +15,7 @@ const nextConfig = {
   },
   eslint: {
     // This ignores linting warnings
-    ignoreBuildErrors: true,
+    ignoreDuringBuilds: true,
   },
 };
 
